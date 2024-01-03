@@ -46,7 +46,7 @@ export default function AuthForm({
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
-            <Text style={styles.title}>MUS</Text>
+            <Text style={styles.title}>Supabook</Text>
             {mode === "signUp" && (
               <View style={styles.input}>
                 <TextInput

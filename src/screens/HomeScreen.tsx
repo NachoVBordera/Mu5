@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from "react-native";
+import { Alert, FlatList, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import React from "react";
@@ -21,6 +21,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
       .select();
     if (error) {
       console.log(error);
+      Alert.alert(error.message);
     } else {
       setPosts([data[0], ...posts]);
     }

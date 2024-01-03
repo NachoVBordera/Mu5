@@ -3,7 +3,7 @@ import { supabase } from "../connection/supabase";
 export const fetchPosts = async () => {
   const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, profile: profiles(user_name)")
     .order("created_at", {
       ascending: false,
     });

@@ -1,13 +1,17 @@
 import { StyleSheet } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
-import { Button, Text, View } from "../components/Themed";
+
 import { supabase } from "../connection/supabase";
+import { useUserInfo } from "../db/userContext";
+import { Button, Text, View } from "../components/Themed";
 
 export default function TabTwoScreen() {
+  const { profile } = useUserInfo();
   return (
     <View style={styles.container}>
-      <Button title="Cerrar sesion" onPress={() => supabase.auth.signOut} />
+      <Text>{profile?.username}</Text>
+      <Button title="Cerrar sesion" onPress={() => supabase.auth.signOut()} />
     </View>
   );
 }

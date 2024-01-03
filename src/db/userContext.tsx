@@ -1,40 +1,66 @@
 import { Session } from "@supabase/supabase-js";
-import React, { createContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { supabase } from "../connection/supabase";
 
 export interface UserProfile {
-  userneame: string;
+  username: string;
   avatarUrl?: string;
 }
+
 export interface UserInfo {
   session: Session | null;
   profile: UserProfile | null;
 }
 
-export const UserContext = createContext<UserInfo>({
+const UserContext = createContext<UserInfo>({
   session: null,
   profile: null,
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [userInfo, setUserInfo] = useState<UserInfo>({
     session: null,
     profile: null,
   });
-  React.useEffect(() => {
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserInfo({ ...userInfo, session });
     });
     supabase.auth.onAuthStateChange((_event, session) => {
-      setUserInfo({ ...userInfo, session });
+      setUserInfo({ session, profile: null });
     });
   }, []);
+
+  const getProfile = async () => {
+    if (!userInfo.session) return;
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userInfo.session.user.id);
+    if (error) {
+      console.log(error);
+    } else {
+      setUserInfo({ ...userInfo, profile: data[0] });
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, [userInfo.session]);
 
   return (
     <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>
   );
 }
 
+// crear un hook reutilizable que utilice el context
 export function useUserInfo() {
-  return React.useContext(UserContext);
+  return useContext(UserContext);
 }
