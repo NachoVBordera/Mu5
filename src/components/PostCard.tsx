@@ -1,26 +1,70 @@
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
-
+import { Alert, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Text, useThemeColor } from "./Themed";
 import { FontAwesome } from "@expo/vector-icons";
-import { Post } from "../db/post";
-import type { Profile } from "../typesModel/Profile";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Avatar from "./Avatar";
+import { Likes, Post, fetchLikes, downloadAvatar } from "../db/post";
+import { Profile } from "../typesModel/Profile";
+import { useUserInfo } from "../db/userContext";
+import { supabase } from "../connection/supabase";
 
 interface Props {
   post: Post;
+  onDelete: () => void;
 }
 
-export default function PostCard({ post }: Props) {
+export default function PostCard({ post, onDelete }: Props) {
   const color = useThemeColor({}, "primary");
   const profile = post.profile as Profile;
+  const user = useUserInfo();
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [likes, setLikes] = useState<Likes>([]);
+
+  const userLikesPost = useMemo(
+    () => likes?.find((like) => like.user_id === user?.profile?.id),
+    [likes, user]
+  );
+
+  const getLikes = useCallback(
+    () => fetchLikes(post.id).then(setLikes),
+    [post]
+  );
+
+  useEffect(() => {
+    getLikes();
+  }, [getLikes]);
+
+  useEffect(() => {
+    if (profile?.avatar_url) {
+      downloadAvatar(profile.avatar_url).then(setAvatarUrl);
+    }
+  }, [profile]);
+
+  const toggleLike = async () => {
+    if (!user.profile) return;
+    if (userLikesPost) {
+      const { error } = await supabase
+        .from("post_likes")
+        .delete()
+        .eq("id", userLikesPost.id);
+      if (error) Alert.alert("Server Error", error.message);
+    } else {
+      const { error } = await supabase.from("post_likes").insert({
+        post_id: post.id,
+        user_id: user?.profile?.id,
+      });
+      if (error) Alert.alert("Server Error", error.message);
+    }
+    getLikes();
+  };
+
   return (
     <Card style={styles.container}>
       {/* Header */}
       <Card style={styles.header}>
-        <Image
-          source={{ uri: "https://picsum.photos/200" }}
-          style={styles.avatar}
-        />
-        <Text style={styles.username}>{profile.user_name} </Text>
+        <Avatar uri={avatarUrl} />
+        <Text style={styles.username}>{profile.username}</Text>
       </Card>
       {/* Image */}
       {post.image && (
@@ -33,9 +77,22 @@ export default function PostCard({ post }: Props) {
         <Text style={styles.contentText}>{post.content}</Text>
         {/* Footer */}
         <Card style={styles.footer}>
-          <TouchableOpacity>
-            <FontAwesome name="heart-o" size={24} color={color} />
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={toggleLike}
+          >
+            <FontAwesome
+              name={userLikesPost ? "heart" : "heart-o"}
+              size={24}
+              color={color}
+            />
+            <Text style={{ marginLeft: 4 }}>{likes.length}</Text>
           </TouchableOpacity>
+          {user?.profile?.id === post.id && (
+            <TouchableOpacity onPress={onDelete}>
+              <FontAwesome name="trash-o" size={24} color={color} />
+            </TouchableOpacity>
+          )}
         </Card>
       </Card>
     </Card>
@@ -52,14 +109,10 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingHorizontal: 16,
   },
-  avatar: {
-    height: 32,
-    width: 32,
-    borderRadius: 16,
-    marginRight: 8,
-  },
+
   username: {
     fontWeight: "bold",
+    marginLeft: 8,
   },
   imageContainer: {
     width: "100%",
@@ -78,5 +131,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingTop: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

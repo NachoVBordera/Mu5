@@ -20,14 +20,17 @@ import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomeScreen from "../screens/HomeScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import AuthScreen from "../screens/AuthScreen";
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import AuthScreen from "../screens/AuthScreen";
 import { useUserInfo } from "../db/userContext";
+import ContactsScreen from "../screens/ContactsScreen";
+import ChatSreen from "../screens/ChatScreen";
+
 const darkTheme = {
   ...DarkTheme,
   colors: {
@@ -35,6 +38,7 @@ const darkTheme = {
     ...Colors.dark,
   },
 };
+
 const lightTheme = {
   ...DefaultTheme,
   colors: {
@@ -42,6 +46,7 @@ const lightTheme = {
     ...Colors.light,
   },
 };
+
 export default function Navigation({
   colorScheme,
 }: {
@@ -62,6 +67,7 @@ export default function Navigation({
  * https://reactnavigation.org/docs/modal
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
 function RootNavigator() {
   const { session } = useUserInfo();
   return (
@@ -75,6 +81,11 @@ function RootNavigator() {
         name="NotFound"
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatSreen}
+        options={({ route }) => ({ title: route?.params?.username ?? "Chat" })}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -91,6 +102,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const { profile } = useUserInfo();
 
   return (
     <BottomTab.Navigator
@@ -105,30 +117,29 @@ function BottomTabNavigator() {
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "Mus",
+          headerTitleAlign: "center",
+
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Contacts"
+        component={ContactsScreen}
+        options={{
+          title: "Messages",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="comment-o" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
         component={TabTwoScreen}
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: profile?.user_name || "Perfil",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="asterisk" color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>

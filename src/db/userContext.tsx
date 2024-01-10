@@ -7,15 +7,14 @@ import {
   useState,
 } from "react";
 import { supabase } from "../connection/supabase";
-
-export interface UserProfile {
-  username: string;
-  avatarUrl?: string;
-}
+import { Profile } from "../typesModel/Profile";
+import { Alert } from "react-native";
 
 export interface UserInfo {
   session: Session | null;
-  profile: UserProfile | null;
+  profile: Profile | null;
+  loading?: boolean;
+  editProfile?: (updatedProfile: Profile, avatarUpdated: Boolean) => void;
 }
 
 const UserContext = createContext<UserInfo>({
@@ -28,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session: null,
     profile: null,
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -55,8 +55,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getProfile();
   }, [userInfo.session]);
 
+  const editProfile = async (
+    updatedProfile: Profile,
+    avatarUpdated: Boolean
+  ) => {
+    setLoading(true);
+
+    try {
+      if (updatedProfile.avatar_url && avatarUpdated) {
+        const { avatar_url } = updatedProfile;
+
+        const fileExt = avatar_url.split(".").pop();
+        const fileName = avatar_url.replace(/^.*[\\\/]/, "");
+        const filePath = `${Date.now()}.${fileExt}`;
+
+        const formData = new FormData();
+        const photo = {
+          uri: avatar_url,
+          name: fileName,
+          type: `image/${fileExt}`,
+        } as unknown as Blob;
+        formData.append("file", photo);
+
+        const { error } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, formData);
+        if (error) throw error;
+        updatedProfile.avatar_url = filePath;
+      }
+      const { error } = await supabase
+        .from("profiles")
+        .update(updatedProfile)
+        .eq("id", userInfo?.profile?.id);
+      if (error) {
+        throw error;
+      } else {
+        getProfile();
+      }
+    } catch (error: any) {
+      Alert.alert("Server Error", error.message);
+    }
+
+    setLoading(false);
+  };
   return (
-    <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ ...userInfo, loading, editProfile }}>
+      {children}
+    </UserContext.Provider>
   );
 }
 

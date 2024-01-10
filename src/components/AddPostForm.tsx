@@ -1,14 +1,31 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { Button, TextInput, Card, useThemeColor } from "./Themed";
 import { Feather } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 interface AddPostFormProps {
-  onSubmit: (content: string) => void;
+  onSubmit: (content: string, image: string) => void;
 }
 export default function AddPostForm({ onSubmit }: AddPostFormProps) {
   const [content, setContent] = React.useState("");
+  const [image, setImage] = React.useState<string | null>(null);
+
   const color = useThemeColor({}, "primary");
 
+  const handlerPickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
   return (
     <Card style={styles.container}>
       <TextInput
@@ -19,17 +36,25 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
       />
 
       <Card style={styles.row}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlerPickImage}>
           <Feather name="image" size={24} color={color} />
         </TouchableOpacity>
         <Button
           title="Publicar"
           onPress={() => {
-            onSubmit(content);
+            onSubmit(content, image!);
             setContent("");
+            setImage("");
           }}
         />
       </Card>
+      {image && (
+        <ImageBackground source={{ uri: image }} style={styles.image}>
+          <TouchableOpacity onPress={() => setImage("")}>
+            <Feather name="x" size={24} color={color} />
+          </TouchableOpacity>
+        </ImageBackground>
+      )}
     </Card>
   );
 }
@@ -51,5 +76,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  image: {
+    height: 200,
+    width: 200,
+    alignItems: "flex-end",
+    padding: 8,
   },
 });

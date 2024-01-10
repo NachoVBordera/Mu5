@@ -38,8 +38,6 @@ export default function AuthScreen() {
     });
 
     if (error) Alert.alert(error.message);
-
-    console.log(data);
     setLoading(false);
   };
   return (
