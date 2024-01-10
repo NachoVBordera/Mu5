@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { supabase } from "../connection/supabase";
-import { Profile } from "../typesModel/Profile";
+import { Profile } from "../models/Profile";
 import { Alert } from "react-native";
 
 export interface UserInfo {

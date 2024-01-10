@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, FlatList } from "react-native";
-import { Contact, Contacts, fetchContacts } from "../db/post";
-import { useUserInfo } from "../db/userContext";
+import { useUserInfo } from "../context/userContext";
 import ContactItem from "../components/ContactItem";
 import { RootTabScreenProps } from "../types";
+import { Contact, Contacts, fetchContacts } from "../services/getContacts";
 
 const ContactsScreen = ({ navigation }: RootTabScreenProps<"Contacts">) => {
   const [contacts, setContacts] = React.useState<Contacts>([]);

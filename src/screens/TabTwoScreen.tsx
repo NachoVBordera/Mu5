@@ -1,8 +1,8 @@
 import { Alert, StyleSheet } from "react-native";
 import { supabase } from "../connection/supabase";
-import { useUserInfo } from "../db/userContext";
+import { useUserInfo } from "../context/userContext";
 import ProfileForm from "../components/ProfileForm";
-import { Profile } from "../typesModel/Profile";
+import { Profile } from "../models/Profile";
 import React from "react";
 
 export default function TabTwoScreen() {

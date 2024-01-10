@@ -27,7 +27,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { useUserInfo } from "../db/userContext";
+import { useUserInfo } from "../context/userContext";
 import ContactsScreen from "../screens/ContactsScreen";
 import ChatSreen from "../screens/ChatScreen";
 

@@ -1,9 +1,9 @@
 import { Alert, StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import { RootStackScreenProps } from "../types";
-import { Messages, fetchMessages, Message } from "../db/post";
+import { Messages, fetchMessages, Message } from "../services/getMessages";
 import React from "react";
-import { useUserInfo } from "../db/userContext";
+import { useUserInfo } from "../context/userContext";
 import { supabase } from "../connection/supabase";
 import { View } from "../components/Themed";
 

@@ -1,13 +1,14 @@
 import { Alert, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Text, useThemeColor } from "./Themed";
 import { FontAwesome } from "@expo/vector-icons";
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Avatar from "./Avatar";
-import { Likes, Post, fetchLikes, downloadAvatar } from "../db/post";
-import { Profile } from "../typesModel/Profile";
-import { useUserInfo } from "../db/userContext";
+import { Profile } from "../models/Profile";
+import { useUserInfo } from "../context/userContext";
 import { supabase } from "../connection/supabase";
+import { Post } from "../services/getAllPost";
+import { Likes, fetchLikes } from "../services/getLikes";
+import { downloadAvatar } from "../services/getAvatar";
 
 interface Props {
   post: Post;

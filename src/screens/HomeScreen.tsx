@@ -4,8 +4,8 @@ import { RootTabScreenProps } from "../types";
 import React from "react";
 import { supabase } from "../connection/supabase";
 import AddPostForm from "../components/AddPostForm";
-import { Posts, fetchPosts } from "../db/post";
 import PostCard from "../components/PostCard";
+import { fetchPosts, Posts } from "../services/getAllPost";
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   const [posts, setPosts] = React.useState<Posts>([]);

@@ -9,10 +9,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Button, Text, TextInput, View } from "./Themed";
-import { Profile } from "../typesModel/Profile";
+import { Profile } from "../models/Profile";
 import Avatar from "./Avatar";
 import * as ImagePicker from "expo-image-picker";
-import { downloadAvatar } from "../db/post";
+import { downloadAvatar } from "../services/getAvatar";
 
 interface ProfileFormProps {
   profile: Profile | null;

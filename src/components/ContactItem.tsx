@@ -1,9 +1,10 @@
 import React from "react";
 
-import { Contact, downloadAvatar } from "../db/post";
-import { Text, View } from "./Themed";
+import { Contact } from "../services/getMessages";
+import { Text } from "./Themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import Avatar from "./Avatar";
+import { downloadAvatar } from "../services/getAvatar";
 interface Props {
   contact: Contact;
   onPressItem: () => void;
