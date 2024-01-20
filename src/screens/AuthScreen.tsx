@@ -22,7 +22,6 @@ export default function AuthScreen() {
 
     if (error) Alert.alert(error.message);
 
-    console.log(data);
     console.log(error);
 
     setLoading(false);
@@ -32,6 +31,7 @@ export default function AuthScreen() {
     if (!("email" in credentials)) return;
     setLoading(true);
     const { email, password } = credentials;
+
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,

@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Contact } from "../services/getMessages";
 import { Text } from "./Themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import Avatar from "./Avatar";
 import { downloadAvatar } from "../services/getAvatar";
+import { Contact } from "../services/getContacts";
 interface Props {
   contact: Contact;
   onPressItem: () => void;
@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 16,
     alignItems: "center",
+    borderRightColor: "black",
+    borderRightWidth: 1,
   },
   title: {
     fontWeight: "bold",

@@ -71,7 +71,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
         data={posts}
         keyExtractor={(item, index) => item.id.toString()}
         renderItem={({ item }) => (
-          <PostCard post={item} onDeleted={() => handleDelete(item.id)} />
+          <PostCard post={item} onDelete={() => handleDelete(item.id)} />
         )}
       />
     </View>

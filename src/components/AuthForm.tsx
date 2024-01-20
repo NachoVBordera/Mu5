@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -46,7 +47,15 @@ export default function AuthForm({
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
-            <Text style={styles.title}>Supabook</Text>
+            <Image
+              source={require("../assets/images/M.png")}
+              style={{
+                width: 70,
+                height: 70,
+                marginTop: 40,
+                alignSelf: "center",
+              }}
+            />
             {mode === "signUp" && (
               <View style={styles.input}>
                 <TextInput

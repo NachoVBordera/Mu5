@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, Image, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -116,9 +116,21 @@ function BottomTabNavigator() {
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
-          title: "Mus",
+          title: "Home",
           headerTitleAlign: "center",
-
+          headerTitle: () => (
+            <Pressable onPress={() => navigation.navigate("Home")}>
+              <Image
+                source={require("../assets/images/M.png")}
+                style={{
+                  width: 35,
+                  height: 35,
+                  marginTop: 1,
+                  tintColor: Colors[colorScheme].tint,
+                }}
+              />
+            </Pressable>
+          ),
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
       />

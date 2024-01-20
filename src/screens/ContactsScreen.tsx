@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useUserInfo } from "../context/userContext";
 import ContactItem from "../components/ContactItem";
 import { RootTabScreenProps } from "../types";
 import { Contact, Contacts, fetchContacts } from "../services/getContacts";
+import { Card } from "../components/Themed";
 
 const ContactsScreen = ({ navigation }: RootTabScreenProps<"Contacts">) => {
   const [contacts, setContacts] = React.useState<Contacts>([]);
@@ -23,17 +24,22 @@ const ContactsScreen = ({ navigation }: RootTabScreenProps<"Contacts">) => {
       data={contacts}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <Text>
+        <Card style={styles.contactItem}>
           {
             <ContactItem
               contact={item}
               onPressItem={() => handleContactOnPress(item)}
             />
           }
-        </Text>
+        </Card>
       )}
     />
   );
 };
-
+const styles = StyleSheet.create({
+  contactItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
+  },
+});
 export default ContactsScreen;

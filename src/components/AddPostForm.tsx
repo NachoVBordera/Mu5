@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { Button, TextInput, Card, useThemeColor } from "./Themed";
+import { Button, TextInput, Card, useThemeColor, Text } from "./Themed";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 interface AddPostFormProps {
@@ -14,6 +14,7 @@ interface AddPostFormProps {
 export default function AddPostForm({ onSubmit }: AddPostFormProps) {
   const [content, setContent] = React.useState("");
   const [image, setImage] = React.useState<string | null>(null);
+  const [nameError, setNameError] = React.useState<string | null>(null);
 
   const color = useThemeColor({}, "primary");
 
@@ -26,6 +27,17 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
       setImage(result.assets[0].uri);
     }
   };
+
+  const handlerPress = () => {
+    if (content.trim() === "") {
+      setNameError("Content is required");
+    } else {
+      setNameError(null);
+      onSubmit(content, image!);
+      setContent("");
+      setImage("");
+    }
+  };
   return (
     <Card style={styles.container}>
       <TextInput
@@ -34,19 +46,13 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
         value={content}
         onChangeText={setContent}
       />
+      {!!nameError && <Text style={{ color: "red" }}>{nameError}</Text>}
 
       <Card style={styles.row}>
         <TouchableOpacity onPress={handlerPickImage}>
           <Feather name="image" size={24} color={color} />
         </TouchableOpacity>
-        <Button
-          title="Publicar"
-          onPress={() => {
-            onSubmit(content, image!);
-            setContent("");
-            setImage("");
-          }}
-        />
+        <Button title="Publicar" onPress={handlerPress} />
       </Card>
       {image && (
         <ImageBackground source={{ uri: image }} style={styles.image}>
@@ -60,6 +66,7 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
 }
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
     width: "100%",
     padding: 16,
     color: "white",
