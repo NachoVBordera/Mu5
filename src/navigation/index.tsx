@@ -12,7 +12,13 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Image, Pressable } from "react-native";
+import {
+  ColorSchemeName,
+  Dimensions,
+  Image,
+  Pressable,
+  Text,
+} from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -30,6 +36,44 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { useUserInfo } from "../context/userContext";
 import ContactsScreen from "../screens/ContactsScreen";
 import ChatSreen from "../screens/ChatScreen";
+const { width, height } = Dimensions.get("window");
+
+export const fromtopToBottom = (
+  index: number,
+  position: any,
+  width: number
+) => {
+  const inputRange = [index - 1, index, index + 1];
+  const opacity = position.interpolate({
+    inputRange,
+    outputRange: [0, 1, 1],
+  });
+
+  const translateY = position.interpolate({
+    inputRange,
+    outputRange: [width, 0, 0],
+  });
+
+  return {
+    opacity,
+    transform: [{ translateY }],
+  };
+};
+
+const transitionsConfig = {
+  return: {
+    screenInterpolator: ({ sceneProps }: any) => {
+      const { initWidth, position, scene } = sceneProps;
+      const { index, route } = scene;
+      const params = route.params || {};
+      const transition = params.transition || "default";
+      return {
+        default: null,
+        fromtopToBottom: fromtopToBottom(index, position, width),
+      }[transition];
+    },
+  },
+};
 
 const darkTheme = {
   ...DarkTheme,
@@ -53,10 +97,7 @@ export default function Navigation({
   colorScheme: ColorSchemeName;
 }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? darkTheme : lightTheme}
-    >
+    <NavigationContainer linking={LinkingConfiguration} theme={darkTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -108,29 +149,39 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: "#144482",
+        tabBarInactiveTintColor: "#fff",
         headerShadowVisible: false,
+        tabBarStyle: {
+          backgroundColor: "#5988B4",
+          borderTopColor: "#5988B4",
+          borderTopWidth: 1,
+        },
       }}
     >
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
-          title: "Home",
           headerTitleAlign: "center",
+          title: () => {},
           headerTitle: () => (
             <Pressable onPress={() => navigation.navigate("Home")}>
-              <Image
-                source={require("../assets/images/M.png")}
+              <Text
                 style={{
-                  width: 35,
-                  height: 35,
-                  marginTop: 1,
-                  tintColor: Colors[colorScheme].tint,
+                  color: "white",
+                  fontSize: 40,
+                  fontWeight: "bold",
                 }}
-              />
+              >
+                tuenti
+              </Text>
             </Pressable>
           ),
+          headerBackground: () => {
+            "#5988B4";
+          },
+
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
       />
@@ -138,7 +189,20 @@ function BottomTabNavigator() {
         name="Contacts"
         component={ContactsScreen}
         options={{
-          title: "Messages",
+          title: () => {},
+          headerTitle: () => (
+            <Pressable onPress={() => navigation.navigate("Home")}>
+              <Text
+                style={{ color: "white", fontSize: 40, fontWeight: "bold" }}
+              >
+                tuenti
+              </Text>
+            </Pressable>
+          ),
+          headerBackground: () => {
+            "#5988B4";
+          },
+
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comment-o" color={color} />
           ),
@@ -148,7 +212,21 @@ function BottomTabNavigator() {
         name="Profile"
         component={TabTwoScreen}
         options={{
-          title: profile?.user_name || "Perfil",
+          headerTitle: () => (
+            <Pressable onPress={() => navigation.navigate("Home")}>
+              <Text
+                style={{ color: "white", fontSize: 40, fontWeight: "bold" }}
+              >
+                tuenti
+              </Text>
+            </Pressable>
+          ),
+          headerBackground: () => {
+            "#5988B4";
+          },
+
+          title: () => {},
+
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="asterisk" color={color} />
           ),

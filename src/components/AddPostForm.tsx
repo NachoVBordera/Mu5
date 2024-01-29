@@ -40,27 +40,31 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
   };
   return (
     <Card style={styles.container}>
-      <TextInput
-        placeholder="What's on your mind?"
-        style={styles.input}
-        value={content}
-        onChangeText={setContent}
-      />
-      {!!nameError && <Text style={{ color: "red" }}>{nameError}</Text>}
-
-      <Card style={styles.row}>
-        <TouchableOpacity onPress={handlerPickImage}>
-          <Feather name="image" size={24} color={color} />
+      <Card style={styles.containerInput}>
+        <TextInput
+          placeholder="What's on your mind?"
+          style={styles.input}
+          value={content}
+          onChangeText={setContent}
+        />
+        <TouchableOpacity
+          style={styles.containerImage}
+          onPress={handlerPickImage}
+        >
+          <Feather name="camera" size={20} color={color} />
         </TouchableOpacity>
+        {image && (
+          <ImageBackground source={{ uri: image }} style={styles.image}>
+            <TouchableOpacity onPress={() => setImage("")}>
+              <Feather name="x" size={24} color={color} />
+            </TouchableOpacity>
+          </ImageBackground>
+        )}
+      </Card>
+      {!!nameError && <Text style={{ color: "red" }}>{nameError}</Text>}
+      <Card style={styles.row}>
         <Button title="Publicar" onPress={handlerPress} />
       </Card>
-      {image && (
-        <ImageBackground source={{ uri: image }} style={styles.image}>
-          <TouchableOpacity onPress={() => setImage("")}>
-            <Feather name="x" size={24} color={color} />
-          </TouchableOpacity>
-        </ImageBackground>
-      )}
     </Card>
   );
 }
@@ -71,23 +75,45 @@ const styles = StyleSheet.create({
     padding: 16,
     color: "white",
   },
+
   input: {
     padding: 8,
     borderWidth: 1,
     borderColor: "gray",
-    borderRadius: 8,
+    borderRadius: 4,
     marginBottom: 8,
     color: "white",
+    flex: 1,
+    backgroundColor: "#C2C6D3",
   },
+
   row: {
-    flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
+
   image: {
     height: 200,
     width: 200,
     alignItems: "flex-end",
     padding: 8,
+  },
+
+  containerInput: {
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+  },
+
+  containerImage: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: "#C2C6D3",
+    borderWidth: 1,
+    borderColor: "gray",
+    width: 45,
+    height: 45,
   },
 });

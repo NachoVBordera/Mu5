@@ -1,5 +1,13 @@
-import { Alert, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Card, Text, useThemeColor } from "./Themed";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  Modal,
+} from "react-native";
+import { useThemeColor } from "./Themed";
 import { FontAwesome } from "@expo/vector-icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Avatar from "./Avatar";
@@ -9,6 +17,7 @@ import { supabase } from "../connection/supabase";
 import { Post } from "../services/getAllPost";
 import { Likes, fetchLikes } from "../services/getLikes";
 import { downloadAvatar } from "../services/getAvatar";
+import ImageDetail from "./imagedetail";
 
 interface Props {
   post: Post;
@@ -21,6 +30,7 @@ export default function PostCard({ post, onDelete }: Props) {
   const user = useUserInfo();
   const [avatarUrl, setAvatarUrl] = useState("");
   const [likes, setLikes] = useState<Likes>([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const userLikesPost = useMemo(
     () => likes?.find((like) => like.user_id === user?.profile?.id),
@@ -61,71 +71,107 @@ export default function PostCard({ post, onDelete }: Props) {
   };
 
   return (
-    <Card style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
-      <Card style={styles.header}>
-        <Avatar uri={avatarUrl} />
-        <Text style={styles.username}>{profile.username}</Text>
-      </Card>
-      {/* Image */}
-      {post.image && (
-        <Card style={styles.imageContainer}>
-          <Image source={{ uri: post.image }} style={styles.image} />
-        </Card>
-      )}
+      <View style={styles.header}>
+        <Avatar uri={avatarUrl} size={70} />
+        <View style={styles.headerContent}>
+          <Text style={styles.username}>{profile.user_name}</Text>
+          <Text style={styles.contentText}>{post.content}</Text>
+        </View>
+      </View>
+
       {/* Content */}
-      <Card style={styles.content}>
-        <Text style={styles.contentText}>{post.content}</Text>
-        {/* Footer */}
-        <Card style={styles.footer}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={toggleLike}
-          >
+      <View style={styles.content}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          {post.image && (
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: post.image }} style={styles.image} />
+            </View>
+          )}
+        </TouchableOpacity>
+        <Modal
+          style={{ height: 360, width: 360 }}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+        >
+          <ImageDetail image={post.image} setModalVisible={setModalVisible} />
+        </Modal>
+      </View>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", alignItems: "center" }}
+          onPress={toggleLike}
+        >
+          {userLikesPost ? (
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../assets/images/iconLike.png")}
+            />
+          ) : (
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../assets/images/iconlikeDis.png")}
+            />
+          )}
+          <Text style={{ marginLeft: 2 }}>{likes.length}</Text>
+        </TouchableOpacity>
+        {/* Image */}
+
+        {user?.profile?.id === post.user_id && (
+          <TouchableOpacity onPress={onDelete}>
             <FontAwesome
-              name={userLikesPost ? "heart" : "heart-o"}
-              size={24}
+              style={styles.delete}
+              name="trash-o"
+              size={22}
               color={color}
             />
-            <Text style={{ marginLeft: 4 }}>{likes.length}</Text>
           </TouchableOpacity>
-          {user?.profile?.id === post.id && (
-            <TouchableOpacity onPress={onDelete}>
-              <FontAwesome name="trash-o" size={24} color={color} />
-            </TouchableOpacity>
-          )}
-        </Card>
-      </Card>
-    </Card>
+        )}
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     marginVertical: 8,
+    marginHorizontal: 8,
+    borderBottomWidth: 1,
   },
   header: {
     flexDirection: "row",
-    alignItems: "center",
+    gap: 10,
     paddingTop: 8,
     paddingHorizontal: 16,
   },
-
+  headerContent: {
+    flex: 1,
+  },
   username: {
     fontWeight: "bold",
-    marginLeft: 8,
+    fontSize: 20,
+
+    color: "#000",
   },
   imageContainer: {
-    width: "100%",
-    height: 300,
+    width: 100,
+    height: 100,
     marginTop: 8,
+    alignSelf: "flex-end",
   },
   image: {
     width: "100%",
     height: "100%",
   },
   content: {
+    alignContent: "space-between",
     padding: 16,
+    marginLeft: 8,
+    marginRight: 8,
   },
   contentText: {
     fontSize: 16,
@@ -134,5 +180,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  delete: {
+    width: 40,
+    height: 40,
   },
 });

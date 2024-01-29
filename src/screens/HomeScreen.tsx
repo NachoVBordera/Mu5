@@ -66,9 +66,9 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
 
   return (
     <View style={styles.container}>
-      <AddPostForm onSubmit={handleSubmit} />
       <FlatList
         data={posts}
+        ListHeaderComponent={<AddPostForm onSubmit={handleSubmit} />}
         keyExtractor={(item, index) => item.id.toString()}
         renderItem={({ item }) => (
           <PostCard post={item} onDelete={() => handleDelete(item.id)} />
@@ -80,6 +80,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     flex: 1,
   },
 });

@@ -48,14 +48,10 @@ export default function AuthForm({
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
             <Image
-              source={require("../assets/images/M.png")}
-              style={{
-                width: 70,
-                height: 70,
-                marginTop: 40,
-                alignSelf: "center",
-              }}
+              style={styles.logo}
+              source={require("../assets/images/icon.png")}
             />
+            <Text style={styles.title}>tuenti</Text>
             {mode === "signUp" && (
               <View style={styles.input}>
                 <TextInput
@@ -65,30 +61,35 @@ export default function AuthForm({
                 />
               </View>
             )}
-            <View style={styles.input}>
-              <TextInput
-                placeholder="Correo"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-            </View>
-            <View style={styles.input}>
-              <TextInput
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-                autoCapitalize="none"
-              />
-            </View>
-            <View style={styles.input}>
-              <Button
-                title={mode === "login" ? "Iniciar sesión" : "Registrarse"}
-                onPress={handleSubmit}
-                disabled={loading || !email || !password}
-              />
+            <View style={styles.inputsContainer}>
+              <View style={styles.input}>
+                <TextInput
+                  placeholder="Correo"
+                  placeholderTextColor={"#000"}
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
+              </View>
+              <View style={styles.input}>
+                <TextInput
+                  placeholderTextColor={"#000"}
+                  placeholder="Contraseña"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                />
+              </View>
+              <View>
+                <Button
+                  color={"#fff"}
+                  title={mode === "login" ? "Iniciar sesión" : "Registrarse"}
+                  onPress={handleSubmit}
+                  disabled={loading || !email || !password}
+                />
+              </View>
             </View>
             <View style={styles.footer}>
               <Text style={{ marginBottom: 8 }}>
@@ -108,6 +109,14 @@ export default function AuthForm({
   );
 }
 const styles = StyleSheet.create({
+  logo: {
+    width: 100,
+    height: 100,
+    position: "absolute",
+    top: 30,
+    left: 10,
+    zIndex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -116,18 +125,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 32,
+    fontSize: 65,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 24,
-    marginTop: 16,
+    marginBottom: 2,
+    marginTop: 10,
   },
   input: {
-    paddingVertical: 8,
+    backgroundColor: "#C2C6D3",
+    borderRadius: 3,
   },
   footer: {
     paddingTop: 16,
     justifyContent: "center",
     alignItems: "center",
+  },
+  button: {
+    marginTop: 8,
+  },
+  inputsContainer: {
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    gap: 16,
   },
 });

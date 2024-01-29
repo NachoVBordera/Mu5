@@ -34,51 +34,31 @@ export type ButtonProps = ThemeProps & DefaultButton["props"];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
+  return <DefaultText {...otherProps} />;
 }
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
 
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <DefaultView style={style} {...otherProps} />;
 }
 
 export function Card(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "card"
-  );
 
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <DefaultView style={[{}, style]} {...otherProps} />;
 }
 
 export function Button(props: DefaultButton["props"]) {
-  const color = useThemeColor({}, "primary");
-  return <DefaultButton color={color} {...props} />;
+  return <DefaultButton {...props} />;
 }
 
 export function TextInput(props: DefaultTextInput["props"]) {
   const { style, ...otherProps } = props;
-  const color = useThemeColor({}, "text");
-  const backgroundColor = useThemeColor({}, "card");
-  const placeholderColor = useThemeColor(
-    { light: "#6b7280", dark: "#9ca3af" },
-    "text"
-  );
-  const primary = useThemeColor({}, "primary");
   return (
     <DefaultTextInput
-      style={[{ backgroundColor, color, fontSize: 16, padding: 8 }, style]}
-      placeholderTextColor={placeholderColor}
-      cursorColor={primary}
-      selectionColor={primary}
+      style={[{ fontSize: 16, padding: 8 }, style]}
       {...props}
     />
   );
