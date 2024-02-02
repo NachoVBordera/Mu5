@@ -6,9 +6,11 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
+  Button,
 } from "react-native";
-import { Button, Text, TextInput, View } from "./Themed";
+import { TextInput, View } from "./Themed";
 
 import type {
   SignInWithPasswordCredentials,
@@ -47,21 +49,23 @@ export default function AuthForm({
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
-            <Image
-              style={styles.logo}
-              source={require("../assets/images/icon.png")}
-            />
-            <Text style={styles.title}>tuenti</Text>
-            {mode === "signUp" && (
-              <View style={styles.input}>
-                <TextInput
-                  placeholder="Nombre de usuario"
-                  value={username}
-                  onChangeText={setUsername}
-                />
-              </View>
-            )}
+            <Text style={styles.title}>
+              <Image
+                style={styles.logo}
+                source={require("../assets/images/icon.png")}
+              />
+              tuenti
+            </Text>
             <View style={styles.inputsContainer}>
+              {mode === "signUp" && (
+                <View style={styles.input}>
+                  <TextInput
+                    placeholder="Nombre de usuario"
+                    value={username}
+                    onChangeText={setUsername}
+                  />
+                </View>
+              )}
               <View style={styles.input}>
                 <TextInput
                   placeholder="Correo"
@@ -110,26 +114,32 @@ export default function AuthForm({
 }
 const styles = StyleSheet.create({
   logo: {
-    width: 100,
-    height: 100,
+    width: 130,
+    height: 130,
     position: "absolute",
-    top: 30,
-    left: 10,
+    top: 240,
+    left: 20,
     zIndex: 1,
   },
   container: {
+    minWidth: "90%",
     flex: 1,
   },
   inner: {
     padding: 16,
+    position: "relative",
     flex: 1,
+    justifyContent: "center",
   },
   title: {
     fontSize: 65,
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "right",
     marginBottom: 2,
     marginTop: 10,
+    color: "white",
+    marginRight: 30,
+    zIndex: 2,
   },
   input: {
     backgroundColor: "#C2C6D3",
@@ -148,5 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#fff",
     gap: 16,
+    zIndex: -2,
   },
 });

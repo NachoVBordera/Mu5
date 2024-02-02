@@ -3,9 +3,10 @@ import {
   SignUpWithPasswordCredentials,
 } from "@supabase/supabase-js";
 import { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import AuthForm from "../components/AuthForm";
 import { supabase } from "../connection/supabase";
+import { View } from "../components/Themed";
 
 export default function AuthScreen() {
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,22 @@ export default function AuthScreen() {
     setLoading(false);
   };
   return (
-    <AuthForm loading={loading} onLogin={handleLogin} onSignUp={handleSignup} />
+    <View style={styles.container}>
+      <AuthForm
+        loading={loading}
+        onLogin={handleLogin}
+        onSignUp={handleSignup}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    width: "100%",
+  },
+});

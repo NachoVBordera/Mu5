@@ -43,6 +43,7 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
       <Card style={styles.containerInput}>
         <TextInput
           placeholder="What's on your mind?"
+          placeholderTextColor="#456D93"
           style={styles.input}
           value={content}
           onChangeText={setContent}
@@ -79,12 +80,12 @@ const styles = StyleSheet.create({
   input: {
     padding: 8,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "black",
     borderRadius: 4,
     marginBottom: 8,
     color: "white",
     flex: 1,
-    backgroundColor: "#C2C6D3",
+    backgroundColor: "#D4D4D4",
   },
 
   row: {
@@ -110,9 +111,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 8,
     borderRadius: 4,
-    backgroundColor: "#C2C6D3",
+    backgroundColor: "#D4D4D4",
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "black",
     width: 45,
     height: 45,
   },
