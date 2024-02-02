@@ -9,8 +9,6 @@ export const fetchContacts = async (user_id: string) => {
     console.log(error);
     return [];
   }
-  console.log(data);
-
   return data;
 };
 export type Contacts = Awaited<ReturnType<typeof fetchContacts>>;

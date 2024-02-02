@@ -76,6 +76,7 @@ export default function ProfileForm({
                 <Avatar uri={imageUri} size={120} />
               </TouchableOpacity>
               <TextInput
+                style={styles.inputName}
                 placeholder="Nombre de usuario"
                 value={username}
                 onChangeText={setUsername}
@@ -89,28 +90,38 @@ export default function ProfileForm({
                 disabled={loading || !username}
               />
             </View>
-            <View style={styles.input}>
-              <Button title="Cerrar sesión" onPress={onLogout} />
-            </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "white",
+    marginVertical: 8,
+    marginHorizontal: 8,
   },
   inner: {
     padding: 16,
     flex: 1,
   },
   input: {
+    flexDirection: "row",
+    gap: 10,
     paddingVertical: 8,
   },
   avatarbutton: {
     marginBottom: 20,
     alignItems: "center",
+    borderWidth: 4,
+    borderColor: "black",
+  },
+  inputName: {
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });

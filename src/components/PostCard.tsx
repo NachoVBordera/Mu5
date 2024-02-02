@@ -72,7 +72,6 @@ export default function PostCard({ post, onDelete }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Avatar uri={avatarUrl} size={70} />
         <View style={styles.headerContent}>
@@ -81,7 +80,6 @@ export default function PostCard({ post, onDelete }: Props) {
         </View>
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           {post.image && (
@@ -99,7 +97,6 @@ export default function PostCard({ post, onDelete }: Props) {
         </Modal>
       </View>
 
-      {/* Footer */}
       <View style={styles.footer}>
         <TouchableOpacity
           style={{ flexDirection: "row", alignItems: "center" }}
@@ -118,7 +115,6 @@ export default function PostCard({ post, onDelete }: Props) {
           )}
           <Text style={{ marginLeft: 2 }}>{likes.length}</Text>
         </TouchableOpacity>
-        {/* Image */}
 
         {user?.profile?.id === post.user_id && (
           <TouchableOpacity onPress={onDelete}>
@@ -141,6 +137,14 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     borderBottomWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   header: {
     flexDirection: "row",

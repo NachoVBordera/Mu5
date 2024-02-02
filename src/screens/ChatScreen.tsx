@@ -1,5 +1,5 @@
-import { Alert, StyleSheet } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
+import { Alert, StyleSheet, Text } from "react-native";
+import { Avatar, GiftedChat } from "react-native-gifted-chat";
 import { RootStackScreenProps } from "../types";
 import { Messages, fetchMessages, Message } from "../services/getMessages";
 import React from "react";
@@ -58,7 +58,15 @@ export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
       setMessages((prevMessages) => [data[0], ...prevMessages]);
     }
   }, []);
-
+  const username = () => {
+    messages.map((message) => {
+      if (message.sender_id === user?.id) {
+        return user?.user_name;
+      } else {
+        return "Contact";
+      }
+    });
+  };
   return (
     <GiftedChat
       messages={messages.map((message) => ({
@@ -71,6 +79,7 @@ export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
       user={{
         _id: user?.id || "",
       }}
+      messagesContainerStyle={{ backgroundColor: "#5988B4" }}
     />
   );
 }

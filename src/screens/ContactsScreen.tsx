@@ -9,10 +9,12 @@ import { Card } from "../components/Themed";
 const ContactsScreen = ({ navigation }: RootTabScreenProps<"Contacts">) => {
   const [contacts, setContacts] = React.useState<Contacts>([]);
   const { profile } = useUserInfo();
+
   React.useEffect(() => {
     if (!profile) return;
     fetchContacts(profile.id).then(setContacts);
   }, []);
+
   const handleContactOnPress = (contact: Contact) => {
     navigation.navigate("Chat", {
       contactId: contact.id,
@@ -22,24 +24,22 @@ const ContactsScreen = ({ navigation }: RootTabScreenProps<"Contacts">) => {
   return (
     <FlatList
       data={contacts}
+      contentContainerStyle={styles.container}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <Card style={styles.contactItem}>
-          {
-            <ContactItem
-              contact={item}
-              onPressItem={() => handleContactOnPress(item)}
-            />
-          }
-        </Card>
+        <ContactItem
+          contact={item}
+          onPressItem={() => handleContactOnPress(item)}
+        />
       )}
     />
   );
 };
 const styles = StyleSheet.create({
-  contactItem: {
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
+  container: {
+    marginTop: 30,
+    alignItems: "center",
+    gap: 10,
   },
 });
 export default ContactsScreen;

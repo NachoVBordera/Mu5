@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Text } from "./Themed";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Text } from "react-native";
 import Avatar from "./Avatar";
 import { downloadAvatar } from "../services/getAvatar";
 import { Contact } from "../services/getContacts";
@@ -30,13 +29,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 16,
     alignItems: "center",
-    borderRightColor: "black",
-    borderRightWidth: 1,
+    minWidth: "90%",
+    justifyContent: "flex-start",
+    borderColor: "black",
+    borderWidth: 2,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   title: {
     fontWeight: "bold",
     fontSize: 18,
-    marginLeft: 16,
+    marginLeft: 23,
     alignItems: "center",
   },
 });
