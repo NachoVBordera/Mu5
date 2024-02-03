@@ -1,5 +1,5 @@
 import React from "react";
-import { Posts } from "../services/getAllPost";
+import { Posts, fetchPosts } from "../services/getAllPost";
 import { supabase } from "../connection/supabase";
 import { Alert } from "react-native";
 import { useUserInfo } from "../context/userContext";
@@ -8,6 +8,7 @@ export default function usePosts() {
   const { profile } = useUserInfo();
 
   const [posts, setPosts] = React.useState<Posts>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const handleDelete = async (id: String) => {
     const { error } = await supabase.from("posts").delete().eq("id", id);
@@ -18,6 +19,15 @@ export default function usePosts() {
       setPosts(posts.filter((post) => post.id !== id));
     }
   };
+
+  const onRefresh = React.useCallback(() => {
+    setIsLoading(true);
+    fetchPosts().then((data) => {
+      setPosts(data);
+      setIsLoading(false);
+    });
+  }, []);
+
   const handleSubmit = async (content: string, image: string) => {
     try {
       let publicUrl = "";
@@ -58,5 +68,13 @@ export default function usePosts() {
     }
   };
 
-  return { posts, setPosts, handleSubmit, handleDelete };
+  return {
+    posts,
+    setPosts,
+    handleSubmit,
+    handleDelete,
+    onRefresh,
+    isLoading,
+    setIsLoading,
+  };
 }

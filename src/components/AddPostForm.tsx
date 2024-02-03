@@ -1,9 +1,4 @@
-import {
-  Image,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Button, TextInput, Card, useThemeColor, Text } from "./Themed";
 import { Feather } from "@expo/vector-icons";
@@ -21,7 +16,6 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
   const handlerPickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
     });
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -54,6 +48,9 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
         >
           <Feather name="camera" size={20} color={color} />
         </TouchableOpacity>
+      </Card>
+      {!!nameError && <Text style={{ color: "red" }}>{nameError}</Text>}
+      <Card style={styles.row}>
         {image && (
           <ImageBackground source={{ uri: image }} style={styles.image}>
             <TouchableOpacity onPress={() => setImage("")}>
@@ -61,9 +58,6 @@ export default function AddPostForm({ onSubmit }: AddPostFormProps) {
             </TouchableOpacity>
           </ImageBackground>
         )}
-      </Card>
-      {!!nameError && <Text style={{ color: "red" }}>{nameError}</Text>}
-      <Card style={styles.row}>
         <Button title="Publicar" onPress={handlerPress} />
       </Card>
     </Card>
@@ -91,6 +85,7 @@ const styles = StyleSheet.create({
   row: {
     justifyContent: "space-between",
     alignItems: "flex-end",
+    gap: 8,
   },
 
   image: {

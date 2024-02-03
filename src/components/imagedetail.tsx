@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, Image, TouchableOpacity, View } from "react-native";
 const { width, height } = Dimensions.get("window");
+import ImageModal from "react-native-image-modal";
 interface Props {
   image: any;
   setModalVisible: (visible: boolean) => void;
@@ -10,20 +11,18 @@ interface Props {
 
 const ImageDetail: React.FC<Props> = ({ image, setModalVisible }) => {
   const navegation = useNavigation();
-
   return (
-    <TouchableOpacity
-      onPress={() => setModalVisible(false)}
+    <ImageModal
+      onTap={() => setModalVisible(false)}
+      resizeMode="contain"
       style={{
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(52, 52, 52, 0.8)",
+        width: 110,
+        height: 110,
       }}
-    >
-      <Image source={{ uri: image }} style={{ width: 360, height: 360 }} />
-    </TouchableOpacity>
+      source={{
+        uri: image,
+      }}
+    />
   );
 };
 

@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   return {
     ...config,
     slug: "mus",
-    name: "mus",
+    name: "Tuenti",
     extra: {
       ...config.extra,
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,

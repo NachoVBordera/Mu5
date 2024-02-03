@@ -17,7 +17,7 @@ import { supabase } from "../connection/supabase";
 import { Post } from "../services/getAllPost";
 import { Likes, fetchLikes } from "../services/getLikes";
 import { downloadAvatar } from "../services/getAvatar";
-import ImageDetail from "./imagedetail";
+import ImageDetail from "./ImageDetail";
 
 interface Props {
   post: Post;
@@ -84,17 +84,15 @@ export default function PostCard({ post, onDelete }: Props) {
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           {post.image && (
             <View style={styles.imageContainer}>
-              <Image source={{ uri: post.image }} style={styles.image} />
+              <ImageDetail
+                image={post.image}
+                setModalVisible={setModalVisible}
+                isVisible={modalVisible}
+                style={styles.image}
+              />
             </View>
           )}
         </TouchableOpacity>
-        <Modal
-          style={{ height: 360, width: 360 }}
-          visible={modalVisible}
-          onDismiss={() => setModalVisible(false)}
-        >
-          <ImageDetail image={post.image} setModalVisible={setModalVisible} />
-        </Modal>
       </View>
 
       <View style={styles.footer}>
