@@ -17,7 +17,7 @@ import { supabase } from "../connection/supabase";
 import { Post } from "../services/getAllPost";
 import { Likes, fetchLikes } from "../services/getLikes";
 import { downloadAvatar } from "../services/getAvatar";
-import ImageDetail from "./ImageDetail";
+import ImageDetail from "./imagedetail";
 
 interface Props {
   post: Post;
