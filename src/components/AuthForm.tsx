@@ -88,7 +88,7 @@ export default function AuthForm({
               </View>
               <View>
                 <Button
-                  color={"#fff"}
+                  color={"#5889B4"}
                   title={mode === "login" ? "Iniciar sesión" : "Registrarse"}
                   onPress={handleSubmit}
                   disabled={loading || !email || !password}
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
+    color: "#C2C6D3",
   },
   inputsContainer: {
     padding: 16,
@@ -160,4 +161,5 @@ const styles = StyleSheet.create({
     gap: 16,
     zIndex: -2,
   },
+  buttonLogin: {},
 });
