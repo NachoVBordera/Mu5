@@ -1,4 +1,3 @@
-import { BlurView } from "@react-native-community/blur";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, Image, TouchableOpacity, View } from "react-native";
@@ -10,7 +9,6 @@ interface Props {
 }
 
 const ImageDetail: React.FC<Props> = ({ image, setModalVisible }) => {
-  const navegation = useNavigation();
   return (
     <ImageModal
       onTap={() => setModalVisible(false)}
