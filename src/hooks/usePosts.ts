@@ -10,13 +10,18 @@ export default function usePosts() {
   const [posts, setPosts] = React.useState<Posts>([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const handleDelete = async (id: String) => {
-    const { error } = await supabase.from("posts").delete().eq("id", id);
-    if (error) {
-      console.log(error);
-      Alert.alert(error.message);
-    } else {
-      setPosts(posts.filter((post) => post.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await supabase.from("post_likes").delete().eq("post_id", id);
+      const { error } = await supabase.from("posts").delete().eq("id", id);
+      if (error) {
+        console.log(error);
+        Alert.alert(error.message);
+      } else {
+        setPosts(posts.filter((post) => post.id !== id));
+      }
+    } catch (error: any) {
+      Alert.alert("Server Error", error.message);
     }
   };
 

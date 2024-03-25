@@ -1,16 +1,26 @@
 import { Alert, StyleSheet, Text } from "react-native";
-import { Avatar, GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat } from "react-native-gifted-chat";
 import { RootStackScreenProps } from "../types";
 import { Messages, fetchMessages, Message } from "../services/getMessages";
 import React from "react";
 import { useUserInfo } from "../context/userContext";
 import { supabase } from "../connection/supabase";
-import { View } from "../components/Themed";
+import { downloadAvatar } from "../services/getAvatar";
+import { getReceiverAvatarUrl } from "../services/getReceiverAvatarUrl";
 
 export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
   const { contactId } = route.params;
   const [messages, setMessages] = React.useState<Messages>([]);
   const { profile: user } = useUserInfo();
+  const [senderAvatartUrl, setSenderAvatartUrl] = React.useState<string | null>(
+    null
+  );
+  React.useEffect(() => {
+    if (!user) return;
+    getReceiverAvatarUrl(contactId).then((url) =>
+      downloadAvatar(url!).then(setSenderAvatartUrl)
+    );
+  }, []);
 
   React.useEffect(() => {
     if (!user) return;
@@ -67,20 +77,25 @@ export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
       }
     });
   };
+
   return (
     <GiftedChat
       messages={messages.map((message) => ({
         _id: message.id,
         text: message.content,
         createdAt: new Date(message.created_at),
-        user: { _id: message.sender_id },
+        user: { _id: message.sender_id, avatar: senderAvatartUrl || "" },
       }))}
       onSend={(messages: any) => onSend(messages)}
       user={{
         _id: user?.id || "",
+        avatar: senderAvatartUrl || "",
       }}
+      onPressAvatar={() => {}}
       messagesContainerStyle={{ backgroundColor: "#5988B4" }}
+      renderAvatarOnTop={true}
     />
   );
 }
+
 const styles = StyleSheet.create({});

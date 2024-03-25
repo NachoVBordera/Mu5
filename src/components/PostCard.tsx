@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Text,
   View,
-  Modal,
 } from "react-native";
 import { useThemeColor } from "./Themed";
 import { FontAwesome } from "@expo/vector-icons";
@@ -18,6 +17,8 @@ import { Post } from "../services/getAllPost";
 import { Likes, fetchLikes } from "../services/getLikes";
 import { downloadAvatar } from "../services/getAvatar";
 import ImageDetail from "./ImageDetail";
+import PostOptionModal from "./PostOptionModal";
+
 
 interface Props {
   post: Post;
@@ -30,8 +31,7 @@ export default function PostCard({ post, onDelete }: Props) {
   const user = useUserInfo();
   const [avatarUrl, setAvatarUrl] = useState("");
   const [likes, setLikes] = useState<Likes>([]);
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const [isVisebleOptions, setIsVisebleOptions] = useState(false);
   const userLikesPost = useMemo(
     () => likes?.find((like) => like.user_id === user?.profile?.id),
     [likes, user]
@@ -75,55 +75,51 @@ export default function PostCard({ post, onDelete }: Props) {
       <View style={styles.header}>
         <Avatar uri={avatarUrl} size={70} />
         <View style={styles.headerContent}>
-          <Text style={styles.username}>{profile.user_name}</Text>
+          <View style={styles.headerName}>
+            <Text style={styles.username}>{profile.user_name}</Text>
+            {user?.profile?.id === post.user_id && (
+              <TouchableOpacity onPress={() => setIsVisebleOptions(true)}>
+                <FontAwesome
+                  style={styles.delete}
+                  name="ellipsis-h"
+                  size={30}
+                  color={color}
+                />
+                <PostOptionModal
+                  setIsVisebleOptions={setIsVisebleOptions}
+                  isVisebleOptions={isVisebleOptions}
+                  onDelete={onDelete}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
           <Text style={styles.contentText}>{post.content}</Text>
         </View>
       </View>
 
       <View style={styles.content}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          {post.image && (
-            <View style={styles.imageContainer}>
-              <ImageDetail
-                image={post.image}
-                setModalVisible={setModalVisible}
-                isVisible={modalVisible}
-                style={styles.image}
-              />
-            </View>
-          )}
-        </TouchableOpacity>
+        {post.image && (
+          <View style={styles.imageContainer}>
+            <ImageDetail image={post.image} />
+          </View>
+        )}
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={{ flexDirection: "row", alignItems: "center" }}
-          onPress={toggleLike}
-        >
+        <TouchableOpacity style={styles.likeButton} onPress={toggleLike}>
           {userLikesPost ? (
             <Image
-              style={{ width: 40, height: 40 }}
+              style={styles.likeImg}
               source={require("../assets/images/iconLike.png")}
             />
           ) : (
             <Image
-              style={{ width: 40, height: 40 }}
+              style={styles.likeImg}
               source={require("../assets/images/iconlikeDis.png")}
             />
           )}
-          <Text style={{ marginLeft: 2 }}>{likes.length}</Text>
+          <Text style={styles.textLike}>{likes.length}</Text>
         </TouchableOpacity>
-
-        {user?.profile?.id === post.user_id && (
-          <TouchableOpacity onPress={onDelete}>
-            <FontAwesome
-              style={styles.delete}
-              name="trash-o"
-              size={22}
-              color={color}
-            />
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );
@@ -153,6 +149,14 @@ const styles = StyleSheet.create({
   headerContent: {
     flex: 1,
   },
+  headerName: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+
   username: {
     fontWeight: "bold",
     fontSize: 20,
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 100,
     height: 100,
-    marginTop: 8,
+    margin: 8,
     alignSelf: "flex-end",
   },
   image: {
@@ -184,7 +188,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   delete: {
+    width: 30,
+    height: 30,
+  },
+  likeButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  likeImg: {
     width: 40,
     height: 40,
+  },
+  textLike: {
+    marginLeft: 2,
   },
 });

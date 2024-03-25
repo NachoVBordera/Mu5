@@ -1,28 +1,41 @@
-import { BlurView } from "@react-native-community/blur";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, Image, TouchableOpacity, View } from "react-native";
-const { width, height } = Dimensions.get("window");
 import ImageModal from "react-native-image-modal";
+import ImageView from "react-native-image-viewing";
 interface Props {
   image: any;
-  setModalVisible: (visible: boolean) => void;
 }
 
-const ImageDetail: React.FC<Props> = ({ image, setModalVisible }) => {
-  const navegation = useNavigation();
+const ImageDetail: React.FC<Props> = ({ image }) => {
+  const [visible, setVisible] = React.useState(false);
   return (
-    <ImageModal
-      onTap={() => setModalVisible(false)}
-      resizeMode="contain"
-      style={{
-        width: 110,
-        height: 110,
-      }}
-      source={{
-        uri: image,
-      }}
-    />
+    <>
+      {/* image contains */}
+      <TouchableOpacity
+        onPress={() => {
+          setVisible(true);
+        }}
+      >
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 120,
+            height: 150,
+          }}
+        />
+      </TouchableOpacity>
+      <ImageView
+        onRequestClose={() => setVisible(false)}
+        visible={visible}
+        images={[
+          {
+            uri: image,
+          },
+        ]}
+        imageIndex={0}
+      />
+    </>
   );
 };
 
