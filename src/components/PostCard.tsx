@@ -19,7 +19,6 @@ import { downloadAvatar } from "../services/getAvatar";
 import ImageDetail from "./ImageDetail";
 import PostOptionModal from "./PostOptionModal";
 
-
 interface Props {
   post: Post;
   onDelete: () => void;
