@@ -3,15 +3,18 @@ import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
 interface Props {
   isLoading: boolean;
   withText?: boolean;
+  size?: "small" | "large";
 }
 
-export const Loader = ({ isLoading = false, withText = false }: Props) => {
+export const Loader = ({
+  isLoading = false,
+  withText = false,
+  size = "large",
+}: Props) => {
   return isLoading ? (
     <View style={styles.loader}>
-      <ActivityIndicator size="large" color="#aaaaaa" />
-      {withText ? (
-        <Text style={{ color: "green" }}>Loading users...</Text>
-      ) : null}
+      <ActivityIndicator size={size} color="#aaaaaa" />
+      {withText ? <Text style={{ color: "green" }}>Loading</Text> : null}
     </View>
   ) : null;
 };

@@ -1,4 +1,5 @@
 import { supabase } from "../connection/supabase";
+import { Tables } from "../models/db_types";
 
 export const fetchPosts = async () => {
   const { data, error } = await supabase
@@ -15,4 +16,5 @@ export const fetchPosts = async () => {
 };
 
 export type Posts = Awaited<ReturnType<typeof fetchPosts>>;
-export type Post = Posts[number];
+export type Comment = Tables<"comments">;
+export type Post = Tables<"posts"> & { comments: Comment[] };
