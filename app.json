@@ -36,6 +36,7 @@
       "production": {}
     },
     "android": {
+      "softwareKeyboardLayoutMode": "resize",
       "package": "com.siteudic.mus",
       "versionCode": 1,
       "adaptiveIcon": {

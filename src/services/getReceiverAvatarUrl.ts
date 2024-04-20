@@ -1,6 +1,8 @@
 import { supabase } from "../connection/supabase";
 
-export const getReceiverAvatarUrl = async (contactId: string) => {
+export const getAvatarUrl = async (
+  contactId: string
+): Promise<string | null> => {
   const { data, error } = await supabase
     .from("profiles")
     .select("avatar_url")
