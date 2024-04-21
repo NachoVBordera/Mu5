@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-
-import { supabase } from "../connection/supabase";
 import AddPostForm from "../components/AddPostForm";
 import PostCard from "../components/PostCard";
 import { fetchPosts, Posts } from "../services/getAllPost";
