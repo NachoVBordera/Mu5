@@ -1,7 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Dimensions, Image, TouchableOpacity, View } from "react-native";
-import ImageModal from "react-native-image-modal";
+import { Image, TouchableOpacity } from "react-native";
+
 import ImageView from "react-native-image-viewing";
 interface Props {
   image: any;

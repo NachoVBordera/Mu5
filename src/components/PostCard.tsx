@@ -21,7 +21,6 @@ import ImageDetail from "./ImageDetail";
 import PostOptionModal from "./PostOptionModal";
 import PostDetailModal from "./PostDetailModal";
 
-
 interface Props {
   post: Post;
   onDelete: () => void;
