@@ -16,6 +16,7 @@ import {
   ColorSchemeName,
   Dimensions,
   Image,
+  ImageBase,
   Pressable,
   Text,
 } from "react-native";
@@ -37,7 +38,7 @@ import { useUserInfo } from "../context/userContext";
 import ContactsScreen from "../screens/ContactsScreen";
 import ChatSreen from "../screens/ChatScreen";
 const { width, height } = Dimensions.get("window");
-
+import logo from "../assets/images/logo.png";
 export const fromtopToBottom = (
   index: number,
   position: any,
@@ -174,7 +175,7 @@ function BottomTabNavigator() {
                   fontWeight: "bold",
                 }}
               >
-                tuenti
+                Tuenti
               </Text>
             </Pressable>
           ),

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   View,
+  BackHandler,
 } from "react-native";
 import { useThemeColor } from "./Themed";
 import { FontAwesome } from "@expo/vector-icons";
@@ -18,6 +19,7 @@ import { Likes, fetchLikes } from "../services/getLikes";
 import { downloadAvatar } from "../services/getAvatar";
 import ImageDetail from "./ImageDetail";
 import PostOptionModal from "./PostOptionModal";
+import PostDetailModal from "./PostDetailModal";
 
 interface Props {
   post: Post;
@@ -31,6 +33,8 @@ export default function PostCard({ post, onDelete }: Props) {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [likes, setLikes] = useState<Likes>([]);
   const [isVisebleOptions, setIsVisebleOptions] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const userLikesPost = useMemo(
     () => likes?.find((like) => like.user_id === user?.profile?.id),
     [likes, user]
@@ -68,9 +72,30 @@ export default function PostCard({ post, onDelete }: Props) {
     }
     getLikes();
   };
+  useEffect(() => {
+    const backAction = () => {
+      console.log("isModalVisible", isModalVisible);
+
+      if (isModalVisible) {
+        setIsModalVisible(false);
+        return true;
+      }
+      return false; // Si el modal no está visible, no hacemos nada y permitimos la acción por defecto.
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [isModalVisible, setIsModalVisible]);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => setIsModalVisible(true)}
+    >
       <View style={styles.header}>
         <Avatar uri={avatarUrl} size={70} />
         <View style={styles.headerContent}>
@@ -120,7 +145,13 @@ export default function PostCard({ post, onDelete }: Props) {
           <Text style={styles.textLike}>{likes.length}</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <PostDetailModal
+        isVisible={isModalVisible}
+        post={post}
+        setModalVisible={setIsModalVisible}
+        onDelete={() => {}}
+      />
+    </TouchableOpacity>
   );
 }
 
