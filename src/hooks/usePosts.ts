@@ -12,6 +12,7 @@ export default function usePosts() {
 
   const handleDelete = async (id: string) => {
     try {
+      await supabase.from("comments").delete().eq("post_id", id);
       await supabase.from("post_likes").delete().eq("post_id", id);
       const { error } = await supabase.from("posts").delete().eq("id", id);
       if (error) {

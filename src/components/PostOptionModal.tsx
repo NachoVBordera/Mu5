@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   ModalLayout: {
     margin: 20,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 35,
     alignItems: "center",
     shadowColor: "#000",
