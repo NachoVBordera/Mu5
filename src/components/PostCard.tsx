@@ -102,11 +102,14 @@ export default function PostCard({ post, onDelete }: Props) {
           <View style={styles.headerName}>
             <Text style={styles.username}>{profile.user_name}</Text>
             {user?.profile?.id === post.user_id && (
-              <TouchableOpacity onPress={() => setIsVisebleOptions(true)}>
+              <TouchableOpacity
+                style={styles.options}
+                onPress={() => setIsVisebleOptions(true)}
+              >
                 <FontAwesome
                   style={styles.delete}
                   name="ellipsis-h"
-                  size={30}
+                  size={20}
                   color={color}
                 />
                 <PostOptionModal
@@ -218,8 +221,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   delete: {
-    width: 30,
+    width: 20,
     height: 30,
+    transform: [{ rotate: "90deg" }],
   },
   likeButton: {
     flexDirection: "row",
@@ -231,5 +235,8 @@ const styles = StyleSheet.create({
   },
   textLike: {
     marginLeft: 2,
+  },
+  options: {
+    width: 15,
   },
 });

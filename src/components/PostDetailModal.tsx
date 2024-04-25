@@ -195,7 +195,9 @@ const PostDetailModal: React.FC<PostDetailModalProps> = ({
                     {loadingComments ? (
                       <Loader isLoading={loadingComments} size="small" />
                     ) : (
-                      comments.map((comment) => <Comment comment={comment} />)
+                      comments.map((comment) => (
+                        <Comment key={comment.id} comment={comment} />
+                      ))
                     )}
                   </ScrollView>
                 </View>

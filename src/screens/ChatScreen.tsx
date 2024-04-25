@@ -6,7 +6,7 @@ import React from "react";
 import { useUserInfo } from "../context/userContext";
 import { supabase } from "../connection/supabase";
 import { downloadAvatar } from "../services/getAvatar";
-import { getAvatarUrl } from "../services/getReceiverAvatarUrl ";
+import { getAvatarUrl } from "../services/getReceiverAvatarUrl";
 
 export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
   const { contactId } = route.params;
@@ -17,7 +17,7 @@ export default function ChatScreen({ route }: RootStackScreenProps<"Chat">) {
   );
   React.useEffect(() => {
     if (!user) return;
-    getReceiverAvatarUrl(contactId).then((url) =>
+    getAvatarUrl(contactId).then((url) =>
       downloadAvatar(url!).then(setSenderAvatartUrl)
     );
   }, []);
